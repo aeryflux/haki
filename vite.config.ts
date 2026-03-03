@@ -4,6 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  base: '/haki/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -11,5 +12,8 @@ export default defineConfig({
   },
   server: {
     port: 3004,
+  },
+  build: {
+    outDir: 'dist',
   },
 })
