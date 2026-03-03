@@ -1,5 +1,5 @@
 {
-  "name": "haki",
+  "name": "@aeryflux/haki",
   "version": "0.1.0",
   "description": "Learn to code with visual step-by-step compilation",
   "type": "module",
@@ -11,22 +11,20 @@
     "test": "vitest"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@aeryflux/design": "file:../../packages/design",
     "@monaco-editor/react": "^4.6.0",
     "d3": "^7.8.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/d3": "^7.4.3",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
-    "@types/d3": "^7.4.3",
     "@vitejs/plugin-react": "^4.2.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.8",
-    "tailwindcss": "^3.4.0",
-    "postcss": "^8.4.32",
-    "autoprefixer": "^10.4.16",
     "vitest": "^1.1.0"
   }
 }
