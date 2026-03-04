@@ -3,8 +3,8 @@
  * Uses @aeryflux/design tokens and utilities
  */
 
-/* Import design system */
-@import '@aeryflux/design/tokens.css';
+/* Import design system - local copy */
+@import './design-tokens.css';
 
 /* ============================================
  * App-Specific Overrides
