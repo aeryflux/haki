@@ -198,3 +198,24 @@
     border-bottom: 1px solid var(--border-color);
   }
 }
+
+/* ============================================
+ * Background Grid (matching Lumos)
+ * ============================================ */
+.app::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent);
+  z-index: 0;
+}
+
+.app > * {
+  position: relative;
+  z-index: 1;
+}
