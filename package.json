@@ -11,7 +11,6 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@aeryflux/design": "file:../../packages/design",
     "@monaco-editor/react": "^4.6.0",
     "d3": "^7.8.5",
     "react": "^18.2.0",
