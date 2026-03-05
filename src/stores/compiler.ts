@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { CompilationPhase, CompilationResult, Token, ASTNode } from '@/types/compiler'
+import type { CompilationPhase, Token, ASTNode } from '@/types/compiler'
 
 interface CompilerState {
   phase: CompilationPhase | null
@@ -21,7 +21,7 @@ const PHASE_DELAYS: Record<CompilationPhase, number> = {
   codegen: 700,
 }
 
-export const useCompilerStore = create<CompilerState>((set, get) => ({
+export const useCompilerStore = create<CompilerState>((set, _get) => ({
   phase: null,
   isCompiling: false,
   tokens: [],
