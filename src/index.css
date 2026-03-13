@@ -1,78 +1,474 @@
 /**
- * Haki - Design System Integration
- * Uses @aeryflux/design tokens and utilities
+ * Haki - Learn to Code Platform
  */
 
-/* Import design system - local copy */
 @import './design-tokens.css';
 
 /* ============================================
- * App-Specific Overrides
+ * Base
  * ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 #root {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+}
+
+.app {
+  min-height: 100vh;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+
+/* Background Grid */
+.app::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+}
+
+.app > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* ============================================
- * Layout
+ * Home
  * ============================================ */
-.app {
+.home {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg-base);
+  align-items: center;
+  padding: 4rem 2rem;
 }
 
-.header {
-  padding: var(--space-4) var(--space-6);
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.home-header {
+  text-align: center;
+  margin-bottom: 4rem;
 }
 
 .logo {
   font-family: var(--font-display);
-  font-size: var(--text-2xl);
+  font-size: 3rem;
   color: var(--color-primary);
   letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
 }
 
-.main {
-  flex: 1;
+.tagline {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+}
+
+.paths-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.panel {
-  height: calc(100vh - 65px);
-  overflow: hidden;
-}
-
-.panel-left {
-  border-right: 1px solid var(--border-color);
-}
-
-.panel-right {
-  background: var(--color-bg-elevated);
-  padding: var(--space-6);
-  overflow-y: auto;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  width: 100%;
 }
 
 /* ============================================
- * Button Component
+ * Path Card
+ * ============================================ */
+.path-card {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  position: relative;
+  font-family: inherit;
+  color: inherit;
+}
+
+.path-card:hover:not(:disabled) {
+  border-color: var(--path-color, var(--color-primary));
+  transform: translateY(-2px);
+}
+
+.path-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.path-card.completed {
+  border-color: var(--color-primary);
+}
+
+.path-card.coming-soon {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.path-icon {
+  font-size: 1.5rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-subtle);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.path-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--path-color, var(--color-text-primary));
+}
+
+.path-info p {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.lock-badge,
+.complete-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1rem;
+}
+
+.complete-badge {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/* ============================================
+ * Path View
+ * ============================================ */
+.path-view {
+  min-height: 100vh;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.path-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.back-btn {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--border-color);
+  color: var(--color-text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-muted);
+}
+
+.path-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.path-title .path-icon {
+  width: auto;
+  height: auto;
+  background: none;
+  font-size: 1.25rem;
+}
+
+/* ============================================
+ * Lesson Card
+ * ============================================ */
+.lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lesson-card {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  width: 100%;
+}
+
+.lesson-card:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+.lesson-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lesson-card.completed {
+  border-color: rgba(0, 255, 136, 0.3);
+}
+
+.lesson-number {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-subtle);
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.lesson-card.completed .lesson-number {
+  background: var(--color-primary);
+  color: var(--color-bg-base);
+}
+
+.lesson-info {
+  flex: 1;
+}
+
+.lesson-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.lesson-info p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.question-count {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+.lesson-card .check {
+  color: var(--color-primary);
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.lesson-card .lock {
+  font-size: 1rem;
+}
+
+/* ============================================
+ * Lesson View
+ * ============================================ */
+.lesson-view {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.lesson-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--color-bg-elevated);
+}
+
+.lesson-title {
+  font-weight: 600;
+}
+
+.lesson-progress {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.progress-bar {
+  height: 3px;
+  background: var(--color-bg-subtle);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+.lesson-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* ============================================
+ * Question View
+ * ============================================ */
+.question-view {
+  max-width: 600px;
+  width: 100%;
+}
+
+.question-text {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.hint-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  margin-bottom: 1rem;
+  font-family: inherit;
+}
+
+.hint-btn:hover {
+  text-decoration: underline;
+}
+
+.hint-text {
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+}
+
+.answer-form {
+  display: flex;
+  gap: 1rem;
+}
+
+.answer-input {
+  flex: 1;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.answer-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* ============================================
+ * Result
+ * ============================================ */
+.result {
+  background: var(--color-bg-elevated);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.result.correct {
+  border-color: var(--color-primary);
+}
+
+.result.wrong {
+  border-color: #ef4444;
+}
+
+.result-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.result.correct .result-header {
+  color: var(--color-primary);
+}
+
+.result.wrong .result-header {
+  color: #ef4444;
+}
+
+.result-answer {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.result-answer code {
+  background: var(--color-bg-subtle);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--color-primary);
+}
+
+.explanation {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--color-bg-subtle);
+  border-radius: 8px;
+}
+
+/* ============================================
+ * Buttons
  * ============================================ */
 .btn {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
-  transition: all var(--duration-normal) var(--easing-default);
+  transition: all 0.15s ease;
 }
 
 .btn-primary {
@@ -80,142 +476,32 @@
   color: var(--color-bg-base);
 }
 
-.btn-primary:hover:not(:disabled) {
-  box-shadow: var(--glow-primary);
+.btn-primary:hover {
   transform: scale(1.02);
-}
-
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ============================================
- * Phase Visualizer
- * ============================================ */
-.phase-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.phase {
-  padding: var(--space-4);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  background: var(--color-bg-subtle);
-  transition: all var(--duration-normal) var(--easing-default);
-}
-
-.phase.active {
-  border-color: var(--color-primary);
-  background: rgba(0, 255, 136, 0.05);
-  animation: aery-pulse 2s var(--easing-default) infinite;
-}
-
-.phase.done {
-  border-color: rgba(0, 255, 136, 0.3);
-}
-
-.phase-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.phase-number {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-full);
-  background: var(--color-bg-elevated);
-  color: var(--color-text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--text-xs);
-  font-weight: var(--font-semibold);
-  transition: all var(--duration-normal) var(--easing-default);
-}
-
-.phase.active .phase-number {
-  background: var(--color-primary);
-  color: var(--color-bg-base);
-  box-shadow: var(--glow-primary);
-}
-
-.phase.done .phase-number {
-  background: var(--color-primary);
-  color: var(--color-bg-base);
-}
-
-.phase-title {
-  font-weight: var(--font-medium);
-  color: var(--color-text-primary);
-}
-
-.phase-desc {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-}
-
-/* ============================================
- * Editor
- * ============================================ */
-.editor-header {
-  height: 40px;
-  padding: 0 var(--space-4);
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-}
-
-.file-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  margin-right: var(--space-2);
-  animation: aery-pulse 3s var(--easing-default) infinite;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
 }
 
 /* ============================================
  * Responsive
  * ============================================ */
-@media (max-width: 768px) {
-  .main {
+@media (max-width: 600px) {
+  .home {
+    padding: 2rem 1rem;
+  }
+
+  .logo {
+    font-size: 2.5rem;
+  }
+
+  .paths-grid {
     grid-template-columns: 1fr;
   }
 
-  .panel {
-    height: auto;
-    min-height: 50vh;
+  .answer-form {
+    flex-direction: column;
   }
 
-  .panel-left {
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
+  .lesson-header {
+    padding: 1rem;
   }
-}
-
-/* ============================================
- * Background Grid (matching Lumos)
- * ============================================ */
-.app::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent);
-  z-index: 0;
-}
-
-.app > * {
-  position: relative;
-  z-index: 1;
 }
