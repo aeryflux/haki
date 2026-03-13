@@ -92,6 +92,9 @@ function executeCommand(cmd: string, fs: VirtualFS): { output: string; success: 
     case 'mkdir': {
       if (!args[0]) return { output: 'mkdir: missing operand', success: false, newFs: fs }
       const target = resolvePath(args[0])
+      if (newFs.dirs.has(target)) {
+        return { output: `mkdir: cannot create directory '${args[0]}': File exists`, success: false, newFs: fs }
+      }
       newFs.dirs.add(target)
       return { output: '', success: true, newFs }
     }
