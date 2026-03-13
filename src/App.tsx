@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { paths, getPath, isPathUnlocked } from './data/paths'
+import { paths, isPathUnlocked } from './data/paths'
 import type { Path, Lesson, Question } from './types/learning'
 
 function PathCard({ path, isUnlocked, isCompleted, onSelect }: {
