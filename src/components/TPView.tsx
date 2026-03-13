@@ -167,21 +167,18 @@ export function TPView({ tp, onComplete, onBack }: TPViewProps) {
     const result = executeCommand(cmd, fs)
     setFs(result.newFs)
 
-    // Check if any task is completed by this command
-    tp.tasks.forEach(task => {
-      if (!completedTasks.has(task.id)) {
-        const isCompleted = task.expectedCommands.some(expected => {
-          // Normalize and compare commands
-          const normalizedCmd = cmd.trim().toLowerCase()
-          const normalizedExpected = expected.trim().toLowerCase()
-          return normalizedCmd === normalizedExpected ||
-                 normalizedCmd.startsWith(normalizedExpected + ' ')
-        })
-        if (isCompleted) {
-          setCompletedTasks(prev => new Set([...prev, task.id]))
-        }
+    // Find the next incomplete task (sequential validation)
+    const nextTask = tp.tasks.find(task => !completedTasks.has(task.id))
+    if (nextTask) {
+      const isCompleted = nextTask.expectedCommands.some(expected => {
+        const normalizedCmd = cmd.trim().toLowerCase()
+        const normalizedExpected = expected.trim().toLowerCase()
+        return normalizedCmd === normalizedExpected
+      })
+      if (isCompleted) {
+        setCompletedTasks(prev => new Set([...prev, nextTask.id]))
       }
-    })
+    }
 
     return result
   }
