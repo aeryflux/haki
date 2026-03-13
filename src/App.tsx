@@ -190,8 +190,8 @@ function Home({ completedPaths, completedLessons, onSelectPath }: {
 
   return (
     <div className="home">
+      <LanguageSwitch />
       <header className="home-header">
-        <LanguageSwitch />
         <h1 className="logo">Haki</h1>
         <p className="tagline">{t('tagline')}</p>
       </header>

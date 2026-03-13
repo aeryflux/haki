@@ -57,6 +57,10 @@
   margin-bottom: 4rem;
 }
 
+.home {
+  position: relative;
+}
+
 .logo {
   font-family: var(--font-display);
   font-size: 3rem;
@@ -489,10 +493,6 @@
 .lang-switch:hover {
   color: var(--color-text-primary);
   border-color: var(--color-text-muted);
-}
-
-.home-header {
-  position: relative;
 }
 
 /* ============================================
