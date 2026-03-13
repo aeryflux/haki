@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { paths, isPathUnlocked } from './data/paths'
+import { I18nProvider, useI18n, LanguageSwitch } from './i18n'
+import { renderWithCode } from './utils'
 import type { Path, Lesson, Question } from './types/learning'
 
 function PathCard({ path, isUnlocked, isCompleted, onSelect }: {
@@ -30,6 +32,7 @@ function QuestionView({ question, onAnswer }: {
   question: Question
   onAnswer: (correct: boolean) => void
 }) {
+  const { t } = useI18n()
   const [input, setInput] = useState('')
   const [showHint, setShowHint] = useState(false)
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
@@ -49,11 +52,11 @@ function QuestionView({ question, onAnswer }: {
 
   return (
     <div className="question-view">
-      <div className="question-text">{question.question}</div>
+      <div className="question-text">{renderWithCode(question.question)}</div>
 
       {question.hint && !result && (
         <button className="hint-btn" onClick={() => setShowHint(!showHint)}>
-          {showHint ? 'Cacher l\'indice' : 'Voir l\'indice'}
+          {showHint ? t('hideHint') : t('showHint')}
         </button>
       )}
 
@@ -67,25 +70,25 @@ function QuestionView({ question, onAnswer }: {
             type="text"
             value={input}
             onChange={e => setInput(e.target.value)}
-            placeholder="Ta réponse..."
+            placeholder={t('yourAnswer')}
             autoFocus
             className="answer-input"
           />
           <button type="submit" className="btn btn-primary">
-            Vérifier
+            {t('check')}
           </button>
         </form>
       ) : (
         <div className={`result ${result}`}>
           <div className="result-header">
-            {result === 'correct' ? '✓ Correct !' : '✗ Pas tout à fait...'}
+            {result === 'correct' ? t('correct') : t('wrong')}
           </div>
           <div className="result-answer">
-            Réponse : <code>{question.answer}</code>
+            {t('answer')} : <code>{question.answer}</code>
           </div>
-          <div className="explanation">{question.explanation}</div>
+          <div className="explanation">{renderWithCode(question.explanation)}</div>
           <button onClick={handleNext} className="btn btn-primary">
-            Continuer →
+            {t('continue')}
           </button>
         </div>
       )}
@@ -98,6 +101,7 @@ function LessonView({ lesson, onComplete, onBack }: {
   onComplete: () => void
   onBack: () => void
 }) {
+  const { t } = useI18n()
   const [questionIndex, setQuestionIndex] = useState(0)
   const question = lesson.questions[questionIndex]
   const progress = ((questionIndex) / lesson.questions.length) * 100
@@ -113,7 +117,7 @@ function LessonView({ lesson, onComplete, onBack }: {
   return (
     <div className="lesson-view">
       <header className="lesson-header">
-        <button onClick={onBack} className="back-btn">← Retour</button>
+        <button onClick={onBack} className="back-btn">{t('back')}</button>
         <div className="lesson-title">{lesson.title}</div>
         <div className="lesson-progress">
           {questionIndex + 1} / {lesson.questions.length}
@@ -137,10 +141,12 @@ function PathView({ path, completedLessons, onSelectLesson, onBack }: {
   onSelectLesson: (lesson: Lesson) => void
   onBack: () => void
 }) {
+  const { t } = useI18n()
+
   return (
     <div className="path-view">
       <header className="path-header">
-        <button onClick={onBack} className="back-btn">← Parcours</button>
+        <button onClick={onBack} className="back-btn">{t('paths')}</button>
         <div className="path-title" style={{ color: path.color }}>
           <span className="path-icon">{path.icon}</span>
           {path.name}
@@ -163,7 +169,7 @@ function PathView({ path, completedLessons, onSelectLesson, onBack }: {
               <div className="lesson-info">
                 <h4>{lesson.title}</h4>
                 <p>{lesson.description}</p>
-                <span className="question-count">{lesson.questions.length} questions</span>
+                <span className="question-count">{lesson.questions.length} {t('questions')}</span>
               </div>
               {isCompleted && <span className="check">✓</span>}
               {!prevCompleted && <span className="lock">🔒</span>}
@@ -180,11 +186,14 @@ function Home({ completedPaths, completedLessons, onSelectPath }: {
   completedLessons: string[]
   onSelectPath: (path: Path) => void
 }) {
+  const { t } = useI18n()
+
   return (
     <div className="home">
       <header className="home-header">
+        <LanguageSwitch />
         <h1 className="logo">Haki</h1>
-        <p className="tagline">Apprends à coder, étape par étape</p>
+        <p className="tagline">{t('tagline')}</p>
       </header>
 
       <main className="paths-grid">
@@ -209,14 +218,14 @@ function Home({ completedPaths, completedLessons, onSelectPath }: {
           <span className="path-icon">🔧</span>
           <div className="path-info">
             <h3>C / C++</h3>
-            <p>Bientôt disponible</p>
+            <p>{t('comingSoon')}</p>
           </div>
         </div>
         <div className="path-card coming-soon">
           <span className="path-icon">🌐</span>
           <div className="path-info">
             <h3>HTML / CSS / JS</h3>
-            <p>Bientôt disponible</p>
+            <p>{t('comingSoon')}</p>
           </div>
         </div>
       </main>
@@ -224,7 +233,7 @@ function Home({ completedPaths, completedLessons, onSelectPath }: {
   )
 }
 
-export default function App() {
+function AppContent() {
   const [view, setView] = useState<'home' | 'path' | 'lesson'>('home')
   const [currentPath, setCurrentPath] = useState<Path | null>(null)
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null)
@@ -298,5 +307,13 @@ export default function App() {
         />
       )}
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <I18nProvider>
+      <AppContent />
+    </I18nProvider>
   )
 }

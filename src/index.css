@@ -457,6 +457,44 @@
   border-radius: 8px;
 }
 
+.explanation code {
+  background: var(--color-bg-elevated);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  color: var(--color-primary);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================
+ * Language Switch
+ * ============================================ */
+.lang-switch {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--border-color);
+  color: var(--color-text-muted);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.lang-switch:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-muted);
+}
+
+.home-header {
+  position: relative;
+}
+
 /* ============================================
  * Buttons
  * ============================================ */
