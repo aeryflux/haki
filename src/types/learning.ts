@@ -18,6 +18,20 @@ export interface Lesson {
   questions: Question[]
 }
 
+export interface TPTask {
+  id: string
+  instruction: LocalizedString
+  expectedCommands: string[]  // Commands that complete this task
+}
+
+export interface TP {
+  id: string
+  title: LocalizedString
+  description: LocalizedString
+  tasks: TPTask[]
+  initialFiles?: Record<string, string>  // Virtual filesystem
+}
+
 export interface Path {
   id: string
   name: LocalizedString
@@ -25,6 +39,7 @@ export interface Path {
   icon: string
   color: string
   lessons: Lesson[]
+  tp?: TP  // Optional practical exercise at the end
   requiredPaths?: string[]
 }
 

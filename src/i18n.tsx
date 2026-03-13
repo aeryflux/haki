@@ -18,6 +18,7 @@ const translations = {
     back: '← Retour',
     paths: '← Parcours',
     questions: 'questions',
+    tasks: 'tâches',
   },
   en: {
     tagline: 'Learn to code, step by step',
@@ -33,6 +34,7 @@ const translations = {
     back: '← Back',
     paths: '← Paths',
     questions: 'questions',
+    tasks: 'tasks',
   },
 }
 

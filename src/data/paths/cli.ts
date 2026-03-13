@@ -238,5 +238,58 @@ export const cliPath: Path = {
         }
       ]
     }
-  ]
+  ],
+  tp: {
+    id: 'cli-tp',
+    title: {
+      fr: 'TP: Organiser un projet',
+      en: 'Lab: Organize a project'
+    },
+    description: {
+      fr: 'Utilise les commandes apprises pour créer et organiser une structure de projet.',
+      en: 'Use the commands you learned to create and organize a project structure.'
+    },
+    tasks: [
+      {
+        id: 'tp-1',
+        instruction: {
+          fr: 'Affiche le répertoire courant avec `pwd`',
+          en: 'Display the current directory with `pwd`'
+        },
+        expectedCommands: ['pwd']
+      },
+      {
+        id: 'tp-2',
+        instruction: {
+          fr: 'Crée un dossier `projet` avec `mkdir`',
+          en: 'Create a folder `projet` with `mkdir`'
+        },
+        expectedCommands: ['mkdir projet']
+      },
+      {
+        id: 'tp-3',
+        instruction: {
+          fr: 'Entre dans le dossier `projet` avec `cd`',
+          en: 'Enter the `projet` folder with `cd`'
+        },
+        expectedCommands: ['cd projet']
+      },
+      {
+        id: 'tp-4',
+        instruction: {
+          fr: 'Crée un fichier `readme.txt` avec `touch`',
+          en: 'Create a file `readme.txt` with `touch`'
+        },
+        expectedCommands: ['touch readme.txt']
+      },
+      {
+        id: 'tp-5',
+        instruction: {
+          fr: 'Liste les fichiers pour vérifier avec `ls`',
+          en: 'List the files to verify with `ls`'
+        },
+        expectedCommands: ['ls']
+      }
+    ]
+  }
 }

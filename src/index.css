@@ -543,3 +543,158 @@
     padding: 1rem;
   }
 }
+
+/* ============================================
+ * Terminal
+ * ============================================ */
+.terminal {
+  background: #0d0d0d;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  width: 100%;
+  max-width: 600px;
+  border: 1px solid var(--border-color);
+}
+
+.terminal-header {
+  background: #1a1a1a;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-dot.red { background: #ff5f56; }
+.terminal-dot.yellow { background: #ffbd2e; }
+.terminal-dot.green { background: #27ca40; }
+
+.terminal-title {
+  margin-left: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.terminal-body {
+  padding: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+  cursor: text;
+}
+
+.terminal-line {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.terminal-line.input {
+  color: var(--color-text-primary);
+}
+
+.terminal-line.output {
+  color: var(--color-text-muted);
+}
+
+.terminal-line.error {
+  color: #ef4444;
+}
+
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terminal-prompt {
+  color: var(--color-primary);
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: var(--color-primary);
+}
+
+/* ============================================
+ * TP View
+ * ============================================ */
+.tp-view {
+  max-width: 700px;
+  width: 100%;
+}
+
+.tp-instructions {
+  margin-bottom: 1.5rem;
+}
+
+.tp-instructions h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-primary);
+}
+
+.tp-instructions p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.tp-instructions code {
+  background: var(--color-bg-elevated);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  color: var(--color-primary);
+  border: 1px solid var(--border-color);
+}
+
+.tp-task {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tp-task-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tp-task-number {
+  background: var(--color-bg-subtle);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.tp-task.completed .tp-task-number {
+  background: var(--color-primary);
+  color: var(--color-bg-base);
+}
+
+.tp-task-text {
+  font-size: 0.95rem;
+}

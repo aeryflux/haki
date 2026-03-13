@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { paths, isPathUnlocked } from './data/paths'
 import { I18nProvider, useI18n, LanguageSwitch } from './i18n'
 import { renderWithCode } from './utils'
-import type { Path, Lesson, Question } from './types/learning'
+import { TPView } from './components/TPView'
+import type { Path, Lesson, Question, TP } from './types/learning'
 
 function PathCard({ path, isUnlocked, isCompleted, onSelect }: {
   path: Path
@@ -137,13 +138,18 @@ function LessonView({ lesson, onComplete, onBack }: {
   )
 }
 
-function PathView({ path, completedLessons, onSelectLesson, onBack }: {
+function PathView({ path, completedLessons, completedTPs, onSelectLesson, onSelectTP, onBack }: {
   path: Path
   completedLessons: string[]
+  completedTPs: string[]
   onSelectLesson: (lesson: Lesson) => void
+  onSelectTP: (tp: TP) => void
   onBack: () => void
 }) {
   const { t, l } = useI18n()
+
+  const allLessonsCompleted = path.lessons.every(l => completedLessons.includes(l.id))
+  const tpCompleted = path.tp ? completedTPs.includes(path.tp.id) : false
 
   return (
     <div className="path-view">
@@ -178,6 +184,23 @@ function PathView({ path, completedLessons, onSelectLesson, onBack }: {
             </button>
           )
         })}
+
+        {path.tp && (
+          <button
+            className={`lesson-card tp-card ${tpCompleted ? 'completed' : ''} ${!allLessonsCompleted ? 'locked' : ''}`}
+            onClick={() => onSelectTP(path.tp!)}
+            disabled={!allLessonsCompleted}
+          >
+            <span className="lesson-number">TP</span>
+            <div className="lesson-info">
+              <h4>{l(path.tp.title)}</h4>
+              <p>{l(path.tp.description)}</p>
+              <span className="question-count">{path.tp.tasks.length} {t('tasks')}</span>
+            </div>
+            {tpCompleted && <span className="check">✓</span>}
+            {!allLessonsCompleted && <span className="lock">🔒</span>}
+          </button>
+        )}
       </main>
     </div>
   )
@@ -236,15 +259,20 @@ function Home({ completedPaths, completedLessons, onSelectPath }: {
 }
 
 function AppContent() {
-  const [view, setView] = useState<'home' | 'path' | 'lesson'>('home')
+  const [view, setView] = useState<'home' | 'path' | 'lesson' | 'tp'>('home')
   const [currentPath, setCurrentPath] = useState<Path | null>(null)
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null)
+  const [currentTP, setCurrentTP] = useState<TP | null>(null)
   const [completedPaths, setCompletedPaths] = useState<string[]>(() => {
     const saved = localStorage.getItem('haki-completed-paths')
     return saved ? JSON.parse(saved) : []
   })
   const [completedLessons, setCompletedLessons] = useState<string[]>(() => {
     const saved = localStorage.getItem('haki-completed-lessons')
+    return saved ? JSON.parse(saved) : []
+  })
+  const [completedTPs, setCompletedTPs] = useState<string[]>(() => {
+    const saved = localStorage.getItem('haki-completed-tps')
     return saved ? JSON.parse(saved) : []
   })
 
@@ -256,6 +284,10 @@ function AppContent() {
     localStorage.setItem('haki-completed-lessons', JSON.stringify(completedLessons))
   }, [completedLessons])
 
+  useEffect(() => {
+    localStorage.setItem('haki-completed-tps', JSON.stringify(completedTPs))
+  }, [completedTPs])
+
   const handleSelectPath = (path: Path) => {
     setCurrentPath(path)
     setView('path')
@@ -266,22 +298,46 @@ function AppContent() {
     setView('lesson')
   }
 
+  const handleSelectTP = (tp: TP) => {
+    setCurrentTP(tp)
+    setView('tp')
+  }
+
   const handleLessonComplete = () => {
     if (currentLesson && currentPath) {
       if (!completedLessons.includes(currentLesson.id)) {
         const newCompletedLessons = [...completedLessons, currentLesson.id]
         setCompletedLessons(newCompletedLessons)
 
-        // Check if path is complete
+        // Check if path is complete (all lessons + TP if exists)
         const pathLessonIds = currentPath.lessons.map(l => l.id)
-        const pathComplete = pathLessonIds.every(id => newCompletedLessons.includes(id))
-        if (pathComplete && !completedPaths.includes(currentPath.id)) {
+        const lessonsComplete = pathLessonIds.every(id => newCompletedLessons.includes(id))
+        const tpComplete = !currentPath.tp || completedTPs.includes(currentPath.tp.id)
+        if (lessonsComplete && tpComplete && !completedPaths.includes(currentPath.id)) {
           setCompletedPaths([...completedPaths, currentPath.id])
         }
       }
     }
     setView('path')
     setCurrentLesson(null)
+  }
+
+  const handleTPComplete = () => {
+    if (currentTP && currentPath) {
+      if (!completedTPs.includes(currentTP.id)) {
+        const newCompletedTPs = [...completedTPs, currentTP.id]
+        setCompletedTPs(newCompletedTPs)
+
+        // Check if path is complete
+        const pathLessonIds = currentPath.lessons.map(l => l.id)
+        const lessonsComplete = pathLessonIds.every(id => completedLessons.includes(id))
+        if (lessonsComplete && !completedPaths.includes(currentPath.id)) {
+          setCompletedPaths([...completedPaths, currentPath.id])
+        }
+      }
+    }
+    setView('path')
+    setCurrentTP(null)
   }
 
   return (
@@ -297,7 +353,9 @@ function AppContent() {
         <PathView
           path={currentPath}
           completedLessons={completedLessons}
+          completedTPs={completedTPs}
           onSelectLesson={handleSelectLesson}
+          onSelectTP={handleSelectTP}
           onBack={() => { setView('home'); setCurrentPath(null) }}
         />
       )}
@@ -306,6 +364,13 @@ function AppContent() {
           lesson={currentLesson}
           onComplete={handleLessonComplete}
           onBack={() => { setView('path'); setCurrentLesson(null) }}
+        />
+      )}
+      {view === 'tp' && currentTP && (
+        <TPView
+          tp={currentTP}
+          onComplete={handleTPComplete}
+          onBack={() => { setView('path'); setCurrentTP(null) }}
         />
       )}
     </div>
