@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import type { LocalizedString } from './types/learning'
 
 export type Locale = 'fr' | 'en'
 
@@ -41,6 +42,7 @@ interface I18nContextType {
   locale: Locale
   setLocale: (locale: Locale) => void
   t: (key: TranslationKey) => string
+  l: (localized: LocalizedString) => string
 }
 
 const I18nContext = createContext<I18nContextType | null>(null)
@@ -61,8 +63,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     return translations[locale][key] || key
   }
 
+  const l = (localized: LocalizedString): string => {
+    return localized[locale]
+  }
+
   return (
-    <I18nContext.Provider value={{ locale, setLocale, t }}>
+    <I18nContext.Provider value={{ locale, setLocale, t, l }}>
       {children}
     </I18nContext.Provider>
   )

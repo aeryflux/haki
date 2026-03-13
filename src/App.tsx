@@ -10,6 +10,8 @@ function PathCard({ path, isUnlocked, isCompleted, onSelect }: {
   isCompleted: boolean
   onSelect: () => void
 }) {
+  const { l } = useI18n()
+
   return (
     <button
       className={`path-card ${!isUnlocked ? 'locked' : ''} ${isCompleted ? 'completed' : ''}`}
@@ -19,8 +21,8 @@ function PathCard({ path, isUnlocked, isCompleted, onSelect }: {
     >
       <span className="path-icon">{path.icon}</span>
       <div className="path-info">
-        <h3>{path.name}</h3>
-        <p>{path.description}</p>
+        <h3>{l(path.name)}</h3>
+        <p>{l(path.description)}</p>
       </div>
       {!isUnlocked && <span className="lock-badge">🔒</span>}
       {isCompleted && <span className="complete-badge">✓</span>}
@@ -32,7 +34,7 @@ function QuestionView({ question, onAnswer }: {
   question: Question
   onAnswer: (correct: boolean) => void
 }) {
-  const { t } = useI18n()
+  const { t, l } = useI18n()
   const [input, setInput] = useState('')
   const [showHint, setShowHint] = useState(false)
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
@@ -52,7 +54,7 @@ function QuestionView({ question, onAnswer }: {
 
   return (
     <div className="question-view">
-      <div className="question-text">{renderWithCode(question.question)}</div>
+      <div className="question-text">{renderWithCode(l(question.question))}</div>
 
       {question.hint && !result && (
         <button className="hint-btn" onClick={() => setShowHint(!showHint)}>
@@ -61,7 +63,7 @@ function QuestionView({ question, onAnswer }: {
       )}
 
       {showHint && question.hint && (
-        <div className="hint-text">💡 {question.hint}</div>
+        <div className="hint-text">💡 {l(question.hint)}</div>
       )}
 
       {!result ? (
@@ -86,7 +88,7 @@ function QuestionView({ question, onAnswer }: {
           <div className="result-answer">
             {t('answer')} : <code>{question.answer}</code>
           </div>
-          <div className="explanation">{renderWithCode(question.explanation)}</div>
+          <div className="explanation">{renderWithCode(l(question.explanation))}</div>
           <button onClick={handleNext} className="btn btn-primary">
             {t('continue')}
           </button>
@@ -101,7 +103,7 @@ function LessonView({ lesson, onComplete, onBack }: {
   onComplete: () => void
   onBack: () => void
 }) {
-  const { t } = useI18n()
+  const { t, l } = useI18n()
   const [questionIndex, setQuestionIndex] = useState(0)
   const question = lesson.questions[questionIndex]
   const progress = ((questionIndex) / lesson.questions.length) * 100
@@ -118,7 +120,7 @@ function LessonView({ lesson, onComplete, onBack }: {
     <div className="lesson-view">
       <header className="lesson-header">
         <button onClick={onBack} className="back-btn">{t('back')}</button>
-        <div className="lesson-title">{lesson.title}</div>
+        <div className="lesson-title">{l(lesson.title)}</div>
         <div className="lesson-progress">
           {questionIndex + 1} / {lesson.questions.length}
         </div>
@@ -141,7 +143,7 @@ function PathView({ path, completedLessons, onSelectLesson, onBack }: {
   onSelectLesson: (lesson: Lesson) => void
   onBack: () => void
 }) {
-  const { t } = useI18n()
+  const { t, l } = useI18n()
 
   return (
     <div className="path-view">
@@ -149,7 +151,7 @@ function PathView({ path, completedLessons, onSelectLesson, onBack }: {
         <button onClick={onBack} className="back-btn">{t('paths')}</button>
         <div className="path-title" style={{ color: path.color }}>
           <span className="path-icon">{path.icon}</span>
-          {path.name}
+          {l(path.name)}
         </div>
       </header>
 
@@ -167,8 +169,8 @@ function PathView({ path, completedLessons, onSelectLesson, onBack }: {
             >
               <span className="lesson-number">{index + 1}</span>
               <div className="lesson-info">
-                <h4>{lesson.title}</h4>
-                <p>{lesson.description}</p>
+                <h4>{l(lesson.title)}</h4>
+                <p>{l(lesson.description)}</p>
                 <span className="question-count">{lesson.questions.length} {t('questions')}</span>
               </div>
               {isCompleted && <span className="check">✓</span>}

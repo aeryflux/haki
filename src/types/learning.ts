@@ -1,22 +1,27 @@
+export type LocalizedString = {
+  fr: string
+  en: string
+}
+
 export interface Question {
   id: string
-  question: string
-  hint?: string
+  question: LocalizedString
+  hint?: LocalizedString
   answer: string
-  explanation: string
+  explanation: LocalizedString
 }
 
 export interface Lesson {
   id: string
-  title: string
-  description: string
+  title: LocalizedString
+  description: LocalizedString
   questions: Question[]
 }
 
 export interface Path {
   id: string
-  name: string
-  description: string
+  name: LocalizedString
+  description: LocalizedString
   icon: string
   color: string
   lessons: Lesson[]
