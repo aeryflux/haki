@@ -123,11 +123,39 @@ function executeCommand(cmd: string, fs: VirtualFS): { output: string; success: 
     case 'rm': {
       if (!args[0]) return { output: 'rm: missing operand', success: false, newFs: fs }
       const target = resolvePath(args[0])
+      // Check if it's a directory
+      if (newFs.dirs.has(target) && target !== '/home/user' && target !== '/home' && target !== '/') {
+        if (args.includes('-r') || args.includes('-rf') || args.includes('-fr')) {
+          newFs.dirs.delete(target)
+          // Also delete files inside
+          Object.keys(newFs.files).forEach(f => {
+            if (f.startsWith(target + '/')) delete newFs.files[f]
+          })
+          return { output: '', success: true, newFs }
+        }
+        return { output: `rm: ${args[0]}: Is a directory`, success: false, newFs: fs }
+      }
       if (newFs.files[target] !== undefined) {
         delete newFs.files[target]
         return { output: '', success: true, newFs }
       }
-      return { output: `rm: ${args[0]}: No such file`, success: false, newFs: fs }
+      return { output: `rm: ${args[0]}: No such file or directory`, success: false, newFs: fs }
+    }
+
+    case 'rmdir': {
+      if (!args[0]) return { output: 'rmdir: missing operand', success: false, newFs: fs }
+      const target = resolvePath(args[0])
+      if (!newFs.dirs.has(target)) {
+        return { output: `rmdir: ${args[0]}: No such directory`, success: false, newFs: fs }
+      }
+      // Check if directory is empty
+      const hasFiles = Object.keys(newFs.files).some(f => f.startsWith(target + '/'))
+      const hasSubdirs = [...newFs.dirs].some(d => d !== target && d.startsWith(target + '/'))
+      if (hasFiles || hasSubdirs) {
+        return { output: `rmdir: ${args[0]}: Directory not empty`, success: false, newFs: fs }
+      }
+      newFs.dirs.delete(target)
+      return { output: '', success: true, newFs }
     }
 
     case 'cp': {
@@ -162,9 +190,16 @@ export function TPView({ tp, onComplete, onBack }: TPViewProps) {
   const { t, l } = useI18n()
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set())
   const [fs, setFs] = useState(() => createFS(tp.initialFiles))
+  const [resetKey, setResetKey] = useState(0)
 
   const progress = (completedTasks.size / tp.tasks.length) * 100
   const allCompleted = completedTasks.size === tp.tasks.length
+
+  const handleReset = () => {
+    setCompletedTasks(new Set())
+    setFs(createFS(tp.initialFiles))
+    setResetKey(k => k + 1)
+  }
 
   const handleCommand = (cmd: string) => {
     const result = executeCommand(cmd, fs)
@@ -202,33 +237,42 @@ export function TPView({ tp, onComplete, onBack }: TPViewProps) {
 
       <main className="lesson-content">
         <div className="tp-view">
-          <div className="tp-instructions">
-            <p>{renderWithCode(l(tp.description))}</p>
-          </div>
+          <div className="tp-panel tp-tasks-panel">
+            <div className="tp-instructions">
+              <p>{renderWithCode(l(tp.description))}</p>
+            </div>
 
-          <div className="tp-tasks">
-            {tp.tasks.map((task, i) => (
-              <div
-                key={task.id}
-                className={`tp-task ${completedTasks.has(task.id) ? 'completed' : ''}`}
-              >
-                <div className="tp-task-header">
-                  <span className="tp-task-number">
-                    {completedTasks.has(task.id) ? '✓' : i + 1}
-                  </span>
-                  <span className="tp-task-text">{renderWithCode(l(task.instruction))}</span>
+            <div className="tp-tasks">
+              {tp.tasks.map((task, i) => (
+                <div
+                  key={task.id}
+                  className={`tp-task ${completedTasks.has(task.id) ? 'completed' : ''}`}
+                >
+                  <div className="tp-task-header">
+                    <span className="tp-task-number">
+                      {completedTasks.has(task.id) ? '✓' : i + 1}
+                    </span>
+                    <span className="tp-task-text">{renderWithCode(l(task.instruction))}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            <div className="tp-actions">
+              <button onClick={handleReset} className="btn btn-secondary">
+                ↺ Reset
+              </button>
+              {allCompleted && (
+                <button onClick={onComplete} className="btn btn-primary">
+                  {t('continue')}
+                </button>
+              )}
+            </div>
           </div>
 
-          <Terminal onCommand={handleCommand} />
-
-          {allCompleted && (
-            <button onClick={onComplete} className="btn btn-primary" style={{ marginTop: '1rem' }}>
-              {t('continue')}
-            </button>
-          )}
+          <div className="tp-panel tp-terminal-panel">
+            <Terminal key={resetKey} onCommand={handleCommand} />
+          </div>
         </div>
       </main>
     </div>
