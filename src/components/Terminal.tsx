@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import { useI18n } from '../i18n'
 
 interface TerminalProps {
   onCommand: (cmd: string) => { output: string; success: boolean }
@@ -8,7 +7,6 @@ interface TerminalProps {
 }
 
 export function Terminal({ onCommand, prompt = '~$', initialOutput = [] }: TerminalProps) {
-  const { t } = useI18n()
   const [history, setHistory] = useState<{ type: 'input' | 'output'; text: string; success?: boolean }[]>(
     initialOutput.map(text => ({ type: 'output', text, success: true }))
   )

@@ -159,7 +159,6 @@ export function TPView({ tp, onComplete, onBack }: TPViewProps) {
   const { t, l } = useI18n()
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set())
   const [fs, setFs] = useState(() => createFS(tp.initialFiles))
-  const [commandHistory, setCommandHistory] = useState<string[]>([])
 
   const progress = (completedTasks.size / tp.tasks.length) * 100
   const allCompleted = completedTasks.size === tp.tasks.length
@@ -167,7 +166,6 @@ export function TPView({ tp, onComplete, onBack }: TPViewProps) {
   const handleCommand = (cmd: string) => {
     const result = executeCommand(cmd, fs)
     setFs(result.newFs)
-    setCommandHistory(prev => [...prev, cmd])
 
     // Check if any task is completed by this command
     tp.tasks.forEach(task => {
