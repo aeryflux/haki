@@ -261,18 +261,18 @@ export const cliPath: Path = {
       {
         id: 'tp-2',
         instruction: {
-          fr: 'Crée un dossier `projet` avec `mkdir`',
-          en: 'Create a folder `projet` with `mkdir`'
+          fr: 'Crée un dossier `project` avec `mkdir`',
+          en: 'Create a folder `project` with `mkdir`'
         },
-        expectedCommands: ['mkdir projet']
+        expectedCommands: ['mkdir project']
       },
       {
         id: 'tp-3',
         instruction: {
-          fr: 'Entre dans le dossier `projet` avec `cd`',
-          en: 'Enter the `projet` folder with `cd`'
+          fr: 'Entre dans le dossier `project` avec `cd`',
+          en: 'Enter the `project` folder with `cd`'
         },
-        expectedCommands: ['cd projet']
+        expectedCommands: ['cd project']
       },
       {
         id: 'tp-4',
