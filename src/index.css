@@ -2,7 +2,9 @@
  * Haki - Learn to Code Platform
  */
 
-@import './design-tokens.css';
+/* AeryFlux Design System */
+@import '@aeryflux/design/css';
+@import '@aeryflux/design/surfaces.css';
 
 /* ============================================
  * Base
@@ -30,10 +32,23 @@
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    linear-gradient(var(--grid-color, rgba(255, 255, 255, 0.06)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color, rgba(255, 255, 255, 0.06)) 1px, transparent 1px);
   background-size: 40px 40px;
   z-index: 0;
+}
+
+/* Theme-aware grid colors */
+[data-surface="dark"] .app::before {
+  --grid-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-surface="green"] .app::before {
+  --grid-color: rgba(0, 255, 136, 0.08);
+}
+
+[data-surface="white"] .app::before {
+  --grid-color: rgba(0, 0, 0, 0.08);
 }
 
 .app > * {
