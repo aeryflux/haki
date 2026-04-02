@@ -1,113 +1,105 @@
 # Haki
 
-> Learn to code with visual step-by-step compilation
+![Tests](https://github.com/aeryflux/haki/actions/workflows/tests.yml/badge.svg)
+![Deploy](https://github.com/aeryflux/haki/actions/workflows/deploy.yml/badge.svg)
+![License](https://img.shields.io/github/license/aeryflux/haki)
 
-## Overview
+> Learn to code with interactive lessons and a built-in CLI simulator.
 
-Haki is an interactive learn-to-code application that visualizes the compilation process of C/C++ programs. Students can see exactly how their code transforms from source to executable, making memory management and low-level concepts intuitive.
+**[haki.aeryflux.com](https://haki.aeryflux.com)**
 
-## Features
+## What is Haki?
 
-### MVP (v0.1)
+Haki is a free, interactive learning platform where you practice CLI commands, Git workflows, and programming fundamentals directly in the browser. No setup required.
 
-- [ ] **Visual Compiler**: Step-through compilation phases
-  - Preprocessing
-  - Lexical analysis (tokenization)
-  - Syntax analysis (AST)
-  - Code generation (assembly preview)
-- [ ] **Memory Visualizer**: Real-time memory layout
-  - Stack visualization
-  - Heap visualization
-  - Pointer relationships
-- [ ] **Interactive Debugger**: Variable inspection with visual cues
-- [ ] **Progressive Lessons**: Curated learning path
+### Current paths
 
-### Future (v0.2+)
+| Path | Topics | Status |
+|------|--------|--------|
+| **CLI / Bash** | Navigation, files, permissions, pipes | Available |
+| **Git** | Init, commit, push, branches, merge | Available (unlocks after CLI) |
 
-- [ ] Challenge mode with gamification
-- [ ] Multi-language support (Rust, Go)
-- [ ] Collaborative coding
-- [ ] Mobile companion app
+### Features
+
+- Interactive Q/A lessons with hints
+- Built-in terminal simulator with real filesystem
+- Practical exercises (TP) with task validation
+- Progress tracking (localStorage)
+- Bilingual: French & English
+- Monaco code editor for C visualization (compiler MVP)
+
+## Quick Start
+
+```bash
+git clone https://github.com/aeryflux/haki.git
+cd haki
+npm install
+npm run dev
+```
+
+Open [localhost:3004](http://localhost:3004).
 
 ## Tech Stack
 
 | Component | Technology |
 |-----------|------------|
-| Frontend | Vite + React + TypeScript |
-| Visualization | D3.js / React Flow |
-| Compiler Backend | WebAssembly (LLVM/Clang) |
-| Code Editor | Monaco Editor |
-| Styling | Tailwind CSS |
+| Framework | Vite + React + TypeScript |
+| Editor | Monaco Editor |
+| Visualization | D3.js |
+| State | Zustand |
+| Design | @aeryflux/design tokens |
+| Deploy | GitHub Pages |
 
-## Architecture
+## Project Structure
 
 ```
 haki/
 ├── src/
 │   ├── components/
-│   │   ├── Editor/           # Monaco-based code editor
-│   │   ├── Visualizer/       # Compilation visualization
-│   │   │   ├── AST/          # Abstract Syntax Tree view
-│   │   │   ├── Memory/       # Memory layout view
-│   │   │   └── Assembly/     # Generated assembly view
-│   │   └── Lessons/          # Learning content
-│   ├── compiler/
-│   │   ├── wasm/             # WASM compiler bindings
-│   │   └── parser/           # Custom parser utilities
-│   ├── hooks/                # React hooks
-│   ├── stores/               # State management
-│   └── types/                # TypeScript definitions
-├── lessons/                  # Lesson content (MDX)
-├── public/
-└── tests/
+│   │   ├── Editor/          # Monaco code editor
+│   │   ├── Visualizer/      # Compilation phase viewer
+│   │   ├── Terminal.tsx      # CLI simulator (11 commands)
+│   │   └── TPView.tsx       # Practical exercise view
+│   ├── data/paths/
+│   │   ├── cli.ts           # CLI/Bash learning path
+│   │   └── git.ts           # Git learning path
+│   ├── stores/
+│   │   └── compiler.ts      # Zustand store
+│   ├── types/               # TypeScript definitions
+│   ├── i18n.tsx             # Internationalization
+│   └── App.tsx              # Main app
+├── .github/workflows/
+│   ├── deploy.yml           # GitHub Pages deploy
+│   └── tests.yml            # CI tests + lint
+└── public/
 ```
 
-## Development
+## Testing
 
 ```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Run tests
-npm test
+npm test              # Run vitest
+npm run lint          # ESLint
 ```
 
-## Design Philosophy
+## Roadmap
 
-1. **Visual First**: Every concept should be visualizable
-2. **Progressive Disclosure**: Complexity revealed gradually
-3. **Immediate Feedback**: Real-time compilation feedback
-4. **Approachable**: Friendly UI, no intimidating interfaces
+The free courses (CLI, Git) will continue to evolve. Future paths may include:
 
-## Color Palette
+- C/C++ compilation visualization (compiler MVP already in codebase)
+- Docker basics
+- SQL fundamentals
 
-| Element | Color | Usage |
-|---------|-------|-------|
-| Primary | `#6366f1` | Actions, highlights |
-| Success | `#22c55e` | Correct code, passing tests |
-| Error | `#ef4444` | Compilation errors |
-| Warning | `#f59e0b` | Warnings, suggestions |
-| Background | `#0f172a` | Dark theme base |
+## Contributing
 
-## Target Audience
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup.
 
-- CS students learning C/C++
-- Self-taught programmers wanting to understand compilation
-- Educators teaching systems programming
-- Anyone curious about "what happens when you compile"
+See [CHANGELOG.md](CHANGELOG.md) for version history.
 
-## Related Projects
+## Related
 
 - [godbolt.org](https://godbolt.org) - Compiler Explorer
 - [pythontutor.com](https://pythontutor.com) - Visual debugger
-- [visualgo.net](https://visualgo.net) - Algorithm visualization
 
 ## License
 
-MIT
+[MIT](LICENSE)
