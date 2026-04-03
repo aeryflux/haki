@@ -341,7 +341,7 @@ function AppContent() {
   }
 
   return (
-    <div className="app">
+    <div className="app aery-grid">
       {view === 'home' && (
         <Home
           completedPaths={completedPaths}
