@@ -18,6 +18,9 @@
     "react-dom": "^18.2.0",
     "zustand": "^4.4.7"
   },
+  "overrides": {
+    "dompurify": "^3.4.0"
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.0",
     "@testing-library/react": "^14.1.0",
@@ -27,7 +30,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "jsdom": "^23.0.0",
     "typescript": "^5.3.3",
-    "vite": "^5.0.8",
+    "vite": "^5.4.21",
     "vitest": "^1.1.0"
   }
 }
